@@ -1,7 +1,8 @@
 [workspace]
 
 members = [
-    "contracts/migaloo-proxy",
+    "packages/*",
+    "contracts/migaloo_proxy",
 ]
 
 

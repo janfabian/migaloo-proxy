@@ -41,6 +41,7 @@ pub fn execute(
     match msg {
         ExecuteMsg::Increment {} => try_increment(deps),
         ExecuteMsg::Reset { count } => try_reset(deps, info, count),
+        ExecuteMsg::Proxy { msg } => proxy(deps),
     }
 }
 
@@ -51,6 +52,10 @@ pub fn try_increment(deps: DepsMut) -> Result<Response, ContractError> {
     })?;
 
     Ok(Response::new().add_attribute("method", "try_increment"))
+}
+
+pub fn proxy(deps: DepsMut) -> Result<Response, ContractError> {
+    Ok(Response::new().add_attribute("method", "proxy"))
 }
 
 pub fn try_reset(deps: DepsMut, info: MessageInfo, count: i32) -> Result<Response, ContractError> {
