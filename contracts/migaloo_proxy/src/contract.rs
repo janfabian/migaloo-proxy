@@ -1,6 +1,8 @@
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
-use cosmwasm_std::{to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult};
+use cosmwasm_std::{
+    from_binary, to_binary, Binary, CosmosMsg, Deps, DepsMut, Env, MessageInfo, Response, StdResult,
+};
 use cw2::set_contract_version;
 
 use crate::error::ContractError;
@@ -41,7 +43,7 @@ pub fn execute(
     match msg {
         ExecuteMsg::Increment {} => try_increment(deps),
         ExecuteMsg::Reset { count } => try_reset(deps, info, count),
-        ExecuteMsg::Proxy { msg } => proxy(deps),
+        ExecuteMsg::Proxy { msgs } => proxy(deps, msgs),
     }
 }
 
@@ -54,8 +56,16 @@ pub fn try_increment(deps: DepsMut) -> Result<Response, ContractError> {
     Ok(Response::new().add_attribute("method", "try_increment"))
 }
 
-pub fn proxy(deps: DepsMut) -> Result<Response, ContractError> {
-    Ok(Response::new().add_attribute("method", "proxy"))
+pub fn proxy(_deps: DepsMut, msgs: Vec<Binary>) -> Result<Response, ContractError> {
+    let mut messages: Vec<CosmosMsg> = vec![];
+
+    for msg in msgs {
+        messages.push(from_binary(&msg)?)
+    }
+
+    Ok(Response::new()
+        .add_messages(messages)
+        .add_attribute("method", "proxy"))
 }
 
 pub fn try_reset(deps: DepsMut, info: MessageInfo, count: i32) -> Result<Response, ContractError> {

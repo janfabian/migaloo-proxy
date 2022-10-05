@@ -129,7 +129,7 @@ contract_address=$($BINARY query wasm list-contract-by-code $code_id --node $RPC
 
 # Append contract_address to output file
 tmpfile=$(mktemp)
-jq -r --arg contract_address $contract_address '.contracts[] | select (.wasm == "fee_collector.wasm") |= . + {contract_address: $contract_address}' $output_path | jq -n '.contracts |= [inputs]' >$tmpfile
+jq -r --arg contract_address $contract_address '.contracts[] | select (.wasm == "migaloo_proxy.wasm") |= . + {contract_address: $contract_address}' $output_path | jq -n '.contracts |= [inputs]' >$tmpfile
 mv $tmpfile $output_path
 sleep 3s
 # echo -e "\nInitializing the Pool Factory..."

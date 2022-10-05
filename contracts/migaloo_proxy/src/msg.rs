@@ -11,8 +11,8 @@ pub struct InstantiateMsg {
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
     Increment {},
-    Proxy { msg: Binary },
     Reset { count: i32 },
+    Proxy { msgs: Vec<Binary> },
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
